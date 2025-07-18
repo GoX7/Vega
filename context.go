@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"io"
+	"net"
 	"net/http"
 
 	"gopkg.in/yaml.v3"
@@ -25,6 +26,14 @@ func newContext(w http.ResponseWriter, r *http.Request) *Context {
 
 func (ctx *Context) Status(code int) {
 	ctx.Writer.writer.WriteHeader(code)
+}
+
+func (ctx *Context) ClientIp() string {
+	ip, _, _ := net.SplitHostPort(ctx.Request.RemoteAddr)
+	if ip == "::1" {
+		return "127.0.0.1"
+	}
+	return ip
 }
 
 func (ctx *Context) Redirect(code int, url string) {
@@ -53,6 +62,28 @@ func (ctx *Context) Bind() ([]byte, error) {
 func (ctx *Context) BindString() (string, error) {
 	data, err := io.ReadAll(ctx.Request.Body)
 	return string(data), err
+}
+
+func (ctx *Context) Form(key string) string {
+	ctx.Request.ParseForm()
+	return ctx.Request.FormValue(key)
+}
+
+func (ctx *Context) FormDefault(key string, fallback string) string {
+	ctx.Request.ParseForm()
+	return ctx.Request.FormValue(key)
+}
+
+func (ctx *Context) Query(key string) string {
+	return ctx.Request.URL.Query().Get(key)
+}
+
+func (ctx *Context) QueryDefault(key string, fallback string) string {
+	value := ctx.Request.URL.Query().Get(key)
+	if value == "" {
+		return fallback
+	}
+	return value
 }
 
 func (ctx *Context) JSON(code int, obj any) error {
