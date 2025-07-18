@@ -1,30 +1,80 @@
-## 🚀 Features & Advantages
+# Vega
 
-### ✨ Supported Functionality
-
-- **HTTP methods**: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`
-- **Exact-path routing** (no wildcard or parameter support yet)
-- **Context object (`*Context`)** wrapping `http.Request` and `http.ResponseWriter`
-- **Response rendering** in multiple formats:
-  - `JSON`
-  - `XML`
-  - `YAML`
-  - raw `string` / `[]byte`
-- **Request binding**:
-  - `BindJSON`
-  - `BindXML`
-  - `BindYAML`
-- **Helper type**: `vega.H` (`map[string]any`) for quick JSON responses
-- **Minimal internal abstractions**, fully compatible with Go's `net/http`
-
-### 💡 Why Choose Vega 0.1.0?
-
-- **Lightweight and minimal** – only core functionality, ideal as a foundation
-- **Zero external dependencies** (except for optional `gopkg.in/yaml.v3`)
-- **Focused on performance** – simple routing with minimal overhead
-- **Transparent and easy to extend or debug**
-- **Compatible** with standard Go tooling and HTTP abstractions
+Vega is a minimal and fast HTTP web framework for Go.  
+It provides a lightweight core with clean abstractions and built-in support for request routing, data binding, and response rendering.
 
 ---
 
-**Note:** This is an early release. Middleware (`Use`, `Next`, `Abort`), route grouping, parameterized routes, error recovery, and static file serving are planned for future versions.
+## 🚀 Features & Advantages
+
+### ✅ Supported Functionality
+
+- HTTP methods: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`
+- Exact path routing (no wildcards or parameters yet)
+- Context object (`*vega.Context`) wrapping `http.Request` and `http.ResponseWriter`
+- Response rendering:
+  - JSON (`ctx.JSON`)
+  - XML (`ctx.XML`)
+  - YAML (`ctx.YAML`)
+  - Raw strings / bytes
+- Request body binding:
+  - `BindJSON`
+  - `BindXML`
+  - `BindYAML`
+- Utility type `vega.H` (alias for `map[string]any`) for JSON responses
+- Built on Go's standard `net/http` without hidden magic
+
+### 💡 Why Choose Vega?
+
+- Minimal and focused – everything you need, nothing you don't
+- Zero external dependencies (except YAML encoder)
+- Transparent and easy to debug
+- Fully compatible with Go's ecosystem and tooling
+- A great base to build your own features on top
+
+---
+
+## 🧪 Example
+
+```go
+package main
+
+import (
+	"vega"
+)
+
+func main() {
+	app := vega.NewRouter()
+
+	app.Get("/", func(ctx *vega.Context) {
+		ctx.JSON(200, vega.H{
+			"message": "Hello from Vega",
+		})
+	})
+
+	app.Post("/echo", func(ctx *vega.Context) {
+		var data map[string]any
+		if err := ctx.BindJSON(&data); err != nil {
+			ctx.JSON(400, vega.H{"error": "Invalid JSON"})
+			return
+		}
+		ctx.JSON(200, data)
+	})
+
+	app.Run(":8080")
+}
+````
+
+---
+
+## 📦 Installation
+
+```bash
+go get github.com/yourusername/vega
+```
+
+---
+
+## ⚠️ Project Status
+
+This is an early-stage release. The core is stable and works, but features like middleware, route grouping, parameterized paths, and error recovery are under development.
