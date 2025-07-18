@@ -35,7 +35,7 @@ func bind() {
 	})
 	router.Post("/xml", func(ctx *vega.Context) {
 		var xml xml
-		ctx.BindXML(xml)
+		ctx.BindXML(&xml)
 	})
 
 	router.Run(":8080")
