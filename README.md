@@ -70,7 +70,7 @@ func main() {
 ## 📦 Installation
 
 ```bash
-go get github.com/yourusername/vega
+go get github.com/gox7/vega
 ```
 
 ---
