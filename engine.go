@@ -3,6 +3,7 @@ package vega
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -20,23 +21,37 @@ func NewRouter() *Engine {
 	}
 }
 
+func checkPatternDefault(pattern *string) {
+	if !strings.HasPrefix(*pattern, "/") {
+		*pattern = "/" + *pattern
+	}
+	if !strings.HasSuffix(*pattern, "/") {
+		*pattern = *pattern + "/"
+	}
+}
+
 func (eng *Engine) Get(pattern string, handler func(ctx *Context)) {
+	checkPattern(&pattern)
 	eng.handlers["GET||"+pattern] = handler
 }
 
 func (eng *Engine) Post(pattern string, handler func(ctx *Context)) {
+	checkPattern(&pattern)
 	eng.handlers["POST||"+pattern] = handler
 }
 
 func (eng *Engine) Put(pattern string, handler func(ctx *Context)) {
+	checkPattern(&pattern)
 	eng.handlers["PUT||"+pattern] = handler
 }
 
 func (eng *Engine) Patch(pattern string, handler func(ctx *Context)) {
+	checkPattern(&pattern)
 	eng.handlers["PATCH||"+pattern] = handler
 }
 
 func (eng *Engine) Delete(pattern string, handler func(ctx *Context)) {
+	checkPattern(&pattern)
 	eng.handlers["DELETE||"+pattern] = handler
 }
 
