@@ -13,6 +13,7 @@ It provides a lightweight core with clean abstractions and built-in support for 
 - Exact path routing (no wildcards or parameters yet)
 - Context object (`*vega.Context`) wrapping `http.Request` and `http.ResponseWriter`
 - Response rendering:
+  - HTML (ctx.HTML)
   - JSON (`ctx.JSON`)
   - XML (`ctx.XML`)
   - YAML (`ctx.YAML`)
