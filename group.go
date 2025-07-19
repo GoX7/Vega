@@ -10,10 +10,10 @@ type (
 )
 
 func (eng *Engine) Group(name string) *Group {
-	if name[:1] != "/" {
+	if !strings.HasPrefix(name, "/") {
 		name = "/" + name
 	}
-	if name[1:] != "/" {
+	if !strings.HasSuffix(name, "/") {
 		name = name + "/"
 	}
 
