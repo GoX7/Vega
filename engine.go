@@ -31,27 +31,27 @@ func checkPatternDefault(pattern *string) {
 }
 
 func (eng *Engine) Get(pattern string, handler func(ctx *Context)) {
-	checkPattern(&pattern)
+	checkPatternDefault(&pattern)
 	eng.handlers["GET||"+pattern] = handler
 }
 
 func (eng *Engine) Post(pattern string, handler func(ctx *Context)) {
-	checkPattern(&pattern)
+	checkPatternDefault(&pattern)
 	eng.handlers["POST||"+pattern] = handler
 }
 
 func (eng *Engine) Put(pattern string, handler func(ctx *Context)) {
-	checkPattern(&pattern)
+	checkPatternDefault(&pattern)
 	eng.handlers["PUT||"+pattern] = handler
 }
 
 func (eng *Engine) Patch(pattern string, handler func(ctx *Context)) {
-	checkPattern(&pattern)
+	checkPatternDefault(&pattern)
 	eng.handlers["PATCH||"+pattern] = handler
 }
 
 func (eng *Engine) Delete(pattern string, handler func(ctx *Context)) {
-	checkPattern(&pattern)
+	checkPatternDefault(&pattern)
 	eng.handlers["DELETE||"+pattern] = handler
 }
 
