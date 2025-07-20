@@ -3,6 +3,7 @@ package vega
 import (
 	"encoding/json"
 	"encoding/xml"
+	"html/template"
 	"io"
 	"net"
 	"net/http"
@@ -84,6 +85,14 @@ func (ctx *Context) QueryDefault(key string, fallback string) string {
 		return fallback
 	}
 	return value
+}
+
+func (ctx *Context) HTML(code int, path string, data any) {
+	tmpl, err := template.ParseFiles(path)
+	if err != nil {
+		ctx.WriteString(500, "html not found")
+	}
+	tmpl.Execute(ctx.Writer.writer, data)
 }
 
 func (ctx *Context) JSON(code int, obj any) error {
